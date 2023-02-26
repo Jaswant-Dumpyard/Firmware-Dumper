@@ -1,0 +1,36 @@
+name: DumprX
+
+on:
+  workflow_dispatch:
+    inputs:
+      link:
+        description: 'Firmware Link'
+        required: true
+
+env:
+  LINK: ${{ github.event.inputs.link }}
+  TZ: Asia/Kolkata
+
+jobs:
+  Firmware-Dump:
+      runs-on: ubuntu-20.04
+
+      steps:
+     
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Cleanup Space
+        uses: rokibhasansagar/slimhub_actions@main
+
+      - name: Installing Requirements
+        run: |
+             chmod a+x setup.sh
+             bash setup.sh
+
+      - name: Firmware is Dumping
+        run: |
+             chmod a+x dumprx.sh
+             echo "Jaswant-Dumpyard" > .github_orgname
+             echo "${{ secrets.GIT_TOKEN }}" > .github_token
+             bash dumprx.sh $LINK
